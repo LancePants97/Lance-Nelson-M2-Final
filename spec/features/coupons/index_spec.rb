@@ -41,10 +41,10 @@ RSpec.describe "merchant coupons index" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
-    @coupon1 = Coupon.create(name: "50% Off!", code: "12345", value: 50, merchant_id: @merchant1.id)
-    @coupon2 = Coupon.create(name: "10% Off!", code: "54321", value: 10, merchant_id: @merchant1.id)
-    @coupon3 = Coupon.create(name: "$2 Off!", code: "TWOTODAY", value: 2, merchant_id: @merchant1.id)
-    @coupon4 = Coupon.create(name: "$3 Off!", code: "3DOLLAR", value: 3, merchant_id: @merchant2.id)
+    @coupon1 = Coupon.create(name: "50% Off!", code: "12345", value: 50, discount_type: 0, active: true, merchant_id: @merchant1.id)
+    @coupon2 = Coupon.create(name: "10% Off!", code: "54321", value: 10, discount_type: 0, active: true, merchant_id: @merchant1.id)
+    @coupon3 = Coupon.create(name: "$2 Off!", code: "TWOTODAY", value: 2, discount_type: 1, active: true, merchant_id: @merchant1.id)
+    @coupon4 = Coupon.create(name: "$3 Off!", code: "3DOLLAR", value: 3, discount_type: 1, active: true, merchant_id: @merchant2.id)
   end
 
   describe "as a merchant, when I visit my merchant dashboard page" do

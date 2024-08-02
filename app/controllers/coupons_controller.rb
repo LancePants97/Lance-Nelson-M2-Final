@@ -18,7 +18,7 @@ class CouponsController < ApplicationController
     if @coupon.save
       redirect_to merchant_coupons_path(@merchant), notice: 'Coupon was successfully created!'
     else
-      render :new
+      render :new, notice: 'Please correctly fill in all form fields'
     end
   end
 

@@ -15,7 +15,7 @@ RSpec.describe "merchant coupons create" do
       visit merchant_coupons_path(@merchant1)
   
       click_link "New Coupon"
-      # save_and_open_page
+
       expect(current_path).to eq new_merchant_coupon_path(@merchant1)
 
       fill_in :name, with: ("15% Off")
@@ -25,7 +25,7 @@ RSpec.describe "merchant coupons create" do
       click_button "Save"
 
       expect(current_path).to eq merchant_coupons_path(@merchant1)
-      # save_and_open_page
+
       expect(page).to have_content("Coupon was successfully created!")
 
       new_coupon = Coupon.last
