@@ -1,0 +1,16 @@
+<h1>New Coupon</h1>
+<%= form_with url: merchant_coupons_path(@merchant), method: :post, local: true do |form| %>
+  <%= form.label "Name" %>
+  <%= form.text_field :name %>
+<p></p>
+  <%= form.label "Unique Discount Code" %>
+  <%= form.text_field :code %>
+<p></p>
+  <%= form.label "Value (percentage or dollars)" %>
+  <%= form.text_field :value %>
+<p></p>
+  <%= form.label :discount_type %>
+  <%= form.select :discount_type, options_for_select([['Percentage Discount', 'percentage'], ['Dollar Amount Discount', 'dollar']], 'percentage') %>
+<p></p>
+  <%= form.submit %>
+<% end %>
