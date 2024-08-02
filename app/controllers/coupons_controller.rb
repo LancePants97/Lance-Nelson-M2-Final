@@ -10,7 +10,7 @@ class CouponsController < ApplicationController
 
   def create
     @merchant = Merchant.find(params[:merchant_id])
-    @coupon = Coupon.create!(name: params[:name], 
+    @coupon = Coupon.new(name: params[:name], 
                             code: params[:code], 
                             value: params[:value],
                             discount_type: params[:discount_type],
@@ -18,7 +18,8 @@ class CouponsController < ApplicationController
     if @coupon.save
       redirect_to merchant_coupons_path(@merchant), notice: 'Coupon was successfully created!'
     else
-      render :new, notice: 'Please correctly fill in all form fields'
+      flash[:notice] = 'Please correctly fill in all form fields'
+      render :new
     end
   end
 

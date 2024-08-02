@@ -13,7 +13,7 @@ RSpec.describe "merchant coupons create" do
   describe "as a merchant, when I visit my coupons index page" do
     it "there is a functional link to create a new coupon" do
       visit merchant_coupons_path(@merchant1)
-  
+
       click_link "New Coupon"
 
       expect(current_path).to eq new_merchant_coupon_path(@merchant1)
@@ -34,6 +34,24 @@ RSpec.describe "merchant coupons create" do
         expect(page).to have_link(new_coupon.name)
         expect(page).to have_link(new_coupon.value)
       end
+    end
+
+    it "the form will not save unless all fields are correctly filled in" do
+      visit merchant_coupons_path(@merchant1)
+
+      click_link "New Coupon"
+
+      expect(current_path).to eq new_merchant_coupon_path(@merchant1)
+      # save_and_open_page
+      fill_in :name, with: ("15% Off")
+      fill_in :code, with: ("12345")
+      fill_in :value, with: (15)
+      page.select "Percent", from: "discount_type"
+      click_button "Save"
+
+      expect(current_path).to eq merchant_coupons_path(@merchant1)
+      save_and_open_page
+      expect(page).to have_content("Please correctly fill in all form fields")
     end
   end
 end
