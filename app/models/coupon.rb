@@ -3,10 +3,11 @@ class Coupon < ApplicationRecord
   belongs_to :merchant
 
   validates :name, presence: true
-  validates :code, uniqueness: { case_sensitive: false }
+  validates :code, presence: true, uniqueness: { case_sensitive: false }
   validates :value, presence: true
   validates :discount_type, presence: true
 
   enum discount_type: { percentage: 0, dollar: 1 }
+  enum status: { inactive: 0, active: 1 }
 
 end
