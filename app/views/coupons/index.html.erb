@@ -1,0 +1,13 @@
+<h1><%= "Coupons for #{@merchant.name}" %></h1>
+<section id="coupons">
+  <% @coupons.each do |coupon| %>
+    <section id="coupon-<%= coupon.id %>">
+      <li><%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %></li>
+      <% if coupon.name.include?("%") %>
+        <%= "Value: #{coupon.value}% off" %>
+      <% else %>
+        <%= "Value: $#{coupon.value} off" %>
+      <% end %>
+    </section>
+  <% end %>
+</section>

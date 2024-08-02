@@ -9,6 +9,8 @@
   </div>
 </div>
 
+<li><%= link_to "View My Coupons", merchant_coupons_path(@merchant) %></li>
+
 <div class="mr-auto col-sm-6">
   <ul>
     <% @merchant.favorite_customers.each do |customer| %>
