@@ -1,0 +1,7 @@
+<%= "Coupon Name: #{@coupon.name}" %>
+<p><%= "Code: #{@coupon.code}" %> </p>
+<% if @coupon.discount_type = 0 %>
+  <p><%= "Value: #{@coupon.value}% off" %> </p>
+<% elsif @coupon.discount_type = 1 %>
+  <%= "Value: $#{@coupon.value} off" %>
+<% end %>
