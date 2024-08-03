@@ -5,7 +5,8 @@
 <% elsif @coupon.discount_type = 1 %>
   <%= "Value: $#{@coupon.value} off" %>
 <% end %>
-<% if #{@coupon.times_applied} == 1 %>
+<p><%= "Status: #{@coupon.status}" %></p>
+<% if @coupon.times_applied == 1 %>
 <%= "This coupon has been used #{@coupon.times_applied} time" %>
 <% else %>
 <%= "This coupon has been used #{@coupon.times_applied} times" %>

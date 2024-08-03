@@ -7,7 +7,7 @@ RSpec.describe "merchant coupons index" do
 
     @coupon1 = Coupon.create(name: "50% Off!", code: "12345", value: 50, discount_type: 0, status: 1, merchant_id: @merchant1.id)
     @coupon2 = Coupon.create(name: "10% Off!", code: "54321", value: 10, discount_type: 0, status: 1, merchant_id: @merchant1.id)
-    @coupon3 = Coupon.create(name: "$2 Off!", code: "TWOTODAY", value: 2, discount_type: 1, status: 1, merchant_id: @merchant1.id)
+    @coupon3 = Coupon.create(name: "$2 Off!", code: "TWOTODAY", value: 2, discount_type: 1, status: 0, merchant_id: @merchant1.id)
     @coupon4 = Coupon.create(name: "$3 Off!", code: "3DOLLAR", value: 3, discount_type: 1, status: 1, merchant_id: @merchant2.id)
 
     @customer_1 = Customer.create!(first_name: "Joey", last_name: "Smith")
@@ -53,6 +53,7 @@ RSpec.describe "merchant coupons index" do
       expect(page).to have_content("Coupon Name: #{@coupon1.name}")
       expect(page).to have_content("Code: #{@coupon1.code}")
       expect(page).to have_content("Value: #{@coupon1.value}% off")
+      expect(page).to have_content("Status: active")
       expect(page).to have_content("This coupon has been used 3 times")
     end
 
@@ -62,6 +63,7 @@ RSpec.describe "merchant coupons index" do
       expect(page).to have_content("Coupon Name: #{@coupon2.name}")
       expect(page).to have_content("Code: #{@coupon2.code}")
       expect(page).to have_content("Value: #{@coupon2.value}% off")
+      expect(page).to have_content("Status: active")
       expect(page).to have_content("This coupon has been used 2 times")
     end
 
@@ -71,6 +73,7 @@ RSpec.describe "merchant coupons index" do
       expect(page).to have_content("Coupon Name: #{@coupon3.name}")
       expect(page).to have_content("Code: #{@coupon3.code}")
       expect(page).to have_content("Value: #{@coupon3.value}% off")
+      expect(page).to have_content("Status: inactive")
       expect(page).to have_content("This coupon has been used 0 times")
     end
 
@@ -80,6 +83,7 @@ RSpec.describe "merchant coupons index" do
       expect(page).to have_content("Coupon Name: #{@coupon4.name}")
       expect(page).to have_content("Code: #{@coupon4.code}")
       expect(page).to have_content("Value: #{@coupon4.value}% off")
+      expect(page).to have_content("Status: active")
       expect(page).to have_content("This coupon has been used 1 time")
     end
   end
