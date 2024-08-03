@@ -9,5 +9,4 @@ class Coupon < ApplicationRecord
 
   enum discount_type: { percentage: 0, dollar: 1 }
   enum status: { inactive: 0, active: 1 }
-
 end
