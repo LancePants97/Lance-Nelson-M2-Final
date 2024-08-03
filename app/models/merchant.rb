@@ -32,7 +32,7 @@ class Merchant < ApplicationRecord
     .group(:id)
     .order('total_revenue desc')
     .limit(5)
-   end
+  end
 
   def self.top_merchants
     joins(invoices: [:invoice_items, :transactions])
@@ -61,6 +61,6 @@ class Merchant < ApplicationRecord
   end
 
   def active_coupons_count
-    self.coupons.where("active = true").count
+    self.coupons.where("status = 1").count
   end
 end

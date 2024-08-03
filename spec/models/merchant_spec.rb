@@ -118,6 +118,11 @@ describe Merchant do
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
 
+      @coupon1 = Coupon.create(name: "50% Off!", code: "12345", value: 50, discount_type: 0, status: 1, merchant_id: @merchant1.id)
+      @coupon2 = Coupon.create(name: "10% Off!", code: "54321", value: 10, discount_type: 0, status: 0, merchant_id: @merchant1.id)
+      @coupon3 = Coupon.create(name: "$2 Off!", code: "TWOTODAY", value: 2, discount_type: 1, status: 1, merchant_id: @merchant1.id)
+      @coupon4 = Coupon.create(name: "$3 Off!", code: "3DOLLAR", value: 3, discount_type: 1, status: 0, merchant_id: @merchant2.id)
+      @coupon4 = Coupon.create(name: "$4 Off!", code: "4DOLLAR", value: 3, discount_type: 1, status: 1, merchant_id: @merchant2.id)
     end
     it "can list items ready to ship" do
       expect(@merchant1.ordered_items_to_ship).to eq([@ii_1, @ii_2, @ii_4, @ii_6, @ii_7, @ii_8, @ii_9, @ii_10])
@@ -146,6 +151,11 @@ describe Merchant do
     it "disabled_items" do 
       expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
+    end
+
+    it "active_coupons_count" do
+      expect(@merchant1.active_coupons_count).to eq(2)
+      expect(@merchant2.active_coupons_count).to eq(1)
     end
   end
 end

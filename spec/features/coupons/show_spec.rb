@@ -1,25 +1,13 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe Coupon, type: :model do
-  describe "relationships" do
-    it { should have_many :invoices }
-    it { should belong_to :merchant }
-  end
-  describe "validations" do
-    it { should validate_presence_of :name }
-    it { should validate_presence_of :code }
-    it { should validate_uniqueness_of(:code).case_insensitive }
-    it { should validate_presence_of :value }
-    it { should validate_numericality_of(:value).is_greater_than(0) }
-  end
-
+RSpec.describe "merchant coupons index" do
   before(:each) do
     @merchant1 = Merchant.create!(name: "Hair Care")
     @merchant2 = Merchant.create!(name: "Twin Lights Brewery")
 
     @coupon1 = Coupon.create(name: "50% Off!", code: "12345", value: 50, discount_type: 0, status: 1, merchant_id: @merchant1.id)
     @coupon2 = Coupon.create(name: "10% Off!", code: "54321", value: 10, discount_type: 0, status: 1, merchant_id: @merchant1.id)
-    @coupon3 = Coupon.create(name: "$2 Off!", code: "TWOTODAY", value: 2, discount_type: 1, status: 1, merchant_id: @merchant1.id)
+    @coupon3 = Coupon.create(name: "$2 Off!", code: "TWOTODAY", value: 2, discount_type: 1, status: 0, merchant_id: @merchant1.id)
     @coupon4 = Coupon.create(name: "$3 Off!", code: "3DOLLAR", value: 3, discount_type: 1, status: 1, merchant_id: @merchant2.id)
 
     @customer_1 = Customer.create!(first_name: "Joey", last_name: "Smith")
@@ -58,13 +46,45 @@ RSpec.describe Coupon, type: :model do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
   end
+  describe "as a merchant, when I visit my coupon's show page" do
+    it "shows the coupon's attributes and how many times it has been used" do
+      visit merchant_coupon_path(@merchant1, @coupon1)
 
-  describe "instance methods" do
-    it "times_applied" do
-      expect(@coupon1.times_applied).to eq 3
-      expect(@coupon2.times_applied).to eq 2
-      expect(@coupon3.times_applied).to eq 0
-      expect(@coupon4.times_applied).to eq 1
+      expect(page).to have_content("Coupon Name: #{@coupon1.name}")
+      expect(page).to have_content("Code: #{@coupon1.code}")
+      expect(page).to have_content("Value: #{@coupon1.value}% off")
+      expect(page).to have_content("Status: active")
+      expect(page).to have_content("This coupon has been used 3 times")
+    end
+
+    it "shows another coupon's attributes and how many times it has been used" do
+      visit merchant_coupon_path(@merchant1, @coupon2)
+
+      expect(page).to have_content("Coupon Name: #{@coupon2.name}")
+      expect(page).to have_content("Code: #{@coupon2.code}")
+      expect(page).to have_content("Value: #{@coupon2.value}% off")
+      expect(page).to have_content("Status: active")
+      expect(page).to have_content("This coupon has been used 2 times")
+    end
+
+    it "shows another coupon's attributes and how many times it has been used" do
+      visit merchant_coupon_path(@merchant1, @coupon3)
+
+      expect(page).to have_content("Coupon Name: #{@coupon3.name}")
+      expect(page).to have_content("Code: #{@coupon3.code}")
+      expect(page).to have_content("Value: #{@coupon3.value}% off")
+      expect(page).to have_content("Status: inactive")
+      expect(page).to have_content("This coupon has been used 0 times")
+    end
+
+    it "shows another coupon's attributes and how many times it has been used" do
+      visit merchant_coupon_path(@merchant2, @coupon4)
+
+      expect(page).to have_content("Coupon Name: #{@coupon4.name}")
+      expect(page).to have_content("Code: #{@coupon4.code}")
+      expect(page).to have_content("Value: #{@coupon4.value}% off")
+      expect(page).to have_content("Status: active")
+      expect(page).to have_content("This coupon has been used 1 time")
     end
   end
 end

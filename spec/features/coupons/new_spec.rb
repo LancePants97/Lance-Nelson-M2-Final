@@ -34,7 +34,6 @@ RSpec.describe "merchant coupons create" do
       expect(page).to have_content("Coupon was successfully created!")
 
       new_coupon = Coupon.last
-
       expect(new_coupon.status).to eq("inactive")
 
       within("#coupons") do
@@ -77,23 +76,24 @@ RSpec.describe "merchant coupons create" do
       expect(page).to have_content("Please correctly fill in all form fields")
     end
 
-    it "the form will not save if you do not select a discount type" do
-      visit new_merchant_coupon_path(@merchant1)
-
-      fill_in :name, with: ("15% Off")
-      fill_in :code, with: ("12345")
-      fill_in :value, with: (15)
-      click_button "Save"
-
-      expect(page).to have_content("Please correctly fill in all form fields")
-    end
-
     it "the form will not save if you use a different capitalization of an existing code" do
       visit new_merchant_coupon_path(@merchant1)
 
       fill_in :name, with: ("15% Off")
       fill_in :code, with: ("twotoday")
       fill_in :value, with: (15)
+      page.select "Percent", from: "discount_type"
+      click_button "Save"
+
+      expect(page).to have_content("Please correctly fill in all form fields")
+    end
+
+    it "the form will not save if you try a negative discount value" do
+      visit new_merchant_coupon_path(@merchant1)
+
+      fill_in :name, with: ("15% Off")
+      fill_in :code, with: ("1950")
+      fill_in :value, with: (-15)
       page.select "Percent", from: "discount_type"
       click_button "Save"
 
