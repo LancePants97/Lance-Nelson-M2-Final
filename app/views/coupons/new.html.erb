@@ -11,7 +11,7 @@
   <%= form.text_field :value %>
 <p></p>
   <%= form.label :discount_type %>
-  <%= form.select :discount_type, options_for_select([['Percentage Discount', 'percentage'], ['Dollar Amount Discount', 'dollar']], 'percentage') %>
+  <%= form.select :discount_type, options_for_select([['Percentage Discount', 'percentage'], ['Dollar Amount Discount', 'dollar']]) %>
 <p></p>
   <%= form.submit %>
 <% end %>

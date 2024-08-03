@@ -10,5 +10,6 @@ RSpec.describe Coupon, type: :model do
     it { should validate_presence_of :code }
     it { should validate_uniqueness_of(:code).case_insensitive }
     it { should validate_presence_of :value }
+    it { should validate_numericality_of(:value).is_greater_than(0) }
   end
 end

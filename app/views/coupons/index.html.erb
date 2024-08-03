@@ -5,7 +5,7 @@
       <li><%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %></li>
       <% if coupon.discount_type = 0 %>
         <%= "Value: #{coupon.value}% off" %>
-      <% else %>
+      <% elsif coupon.discount_type = 1 %>
         <%= "Value: $#{coupon.value} off" %>
       <% end %>
     </section>
