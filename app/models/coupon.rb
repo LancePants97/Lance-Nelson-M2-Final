@@ -13,7 +13,7 @@ class Coupon < ApplicationRecord
 
   def times_applied
     transactions
-      .where('result = ?', 1)
+      .where("result = 1")
       .count
   end
 end
