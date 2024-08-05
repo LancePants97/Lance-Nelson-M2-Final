@@ -4,14 +4,15 @@ RSpec.describe Invoice, type: :model do
   describe "validations" do
     it { should validate_presence_of :status }
     it { should validate_presence_of :customer_id }
-    it { should_not validate_presence_of :coupon_id }
+    it { should_not validate_presence_of :coupon_id } # this is redundant but I'm leaving it in since the coupon_id is optional here
   end
   describe "relationships" do
     it { should belong_to :customer }
     it { should belong_to(:coupon).optional }
+    it { should have_many :transactions}
+    it { should have_many :invoice_items }
     it { should have_many(:items).through(:invoice_items) }
     it { should have_many(:merchants).through(:items) }
-    it { should have_many :transactions}
   end
   describe "instance methods" do
     it "total_revenue" do

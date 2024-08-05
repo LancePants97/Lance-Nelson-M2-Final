@@ -11,3 +11,11 @@
 <% else %>
 <%= "This coupon has been used #{@coupon.times_applied} times" %>
 <% end %>
+
+<% if @coupon.status == "active" && @coupon.pending_items_count == 0 %>
+  <%= button_to 'Deactivate', merchant_coupon_path(@merchant, @coupon), method: :patch, params: {status: 'inactive'} %></li>
+<% elsif @coupon.status == "inactive" && @merchant.active_coupons_count < 5 %>
+  <%= button_to 'Activate', merchant_coupon_path(@merchant, @coupon), method: :patch, params: {status: 'active'} %></li>
+  <% else %>
+  <p><%= "Make sure you have less than 5 active coupons, and that none of those active coupons have pending invoice items." %></p>
+<% end %>

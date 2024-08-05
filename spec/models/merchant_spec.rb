@@ -60,7 +60,6 @@ describe Merchant do
       create(:transaction, invoice: @invoice6, result: 1) 
       create(:transaction, invoice: @invoice7, result: 1) 
       create(:transaction, invoice: @invoice8, result: 1) 
-
     end
 
     it 'top_merchants' do
