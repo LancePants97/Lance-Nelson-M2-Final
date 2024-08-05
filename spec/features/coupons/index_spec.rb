@@ -43,7 +43,7 @@ RSpec.describe "merchant coupons index" do
 
     @coupon1 = Coupon.create(name: "50% Off!", code: "12345", value: 50, discount_type: 0, status: 1, merchant_id: @merchant1.id)
     @coupon2 = Coupon.create(name: "10% Off!", code: "54321", value: 10, discount_type: 0, status: 1, merchant_id: @merchant1.id)
-    @coupon3 = Coupon.create(name: "$2 Off!", code: "TWOTODAY", value: 2, discount_type: 1, status: 1, merchant_id: @merchant1.id)
+    @coupon3 = Coupon.create(name: "$2 Off!", code: "TWOTODAY", value: 2, discount_type: 1, status: 0, merchant_id: @merchant1.id)
     @coupon4 = Coupon.create(name: "$3 Off!", code: "3DOLLAR", value: 3, discount_type: 1, status: 1, merchant_id: @merchant2.id)
   end
 
@@ -81,7 +81,7 @@ RSpec.describe "merchant coupons index" do
 
       visit merchant_coupons_path(@merchant1)
 
-      within("#coupon-#{@coupon3.id}") do
+      within("#inactive_coupon-#{@coupon3.id}") do
         click_link(@coupon3.name)
         expect(current_path).to eq merchant_coupon_path(@merchant1, @coupon3)
       end
@@ -109,6 +109,18 @@ RSpec.describe "merchant coupons index" do
       within("#coupon-#{@coupon4.id}") do
         click_link(@coupon4.name)
         expect(current_path).to eq merchant_coupon_path(@merchant2, @coupon4)
+      end
+    end
+
+    it "sorts all coupons by their status (active or inactive)" do
+      visit merchant_coupons_path(@merchant1)
+      # save_and_open_page
+      within("#active_coupons") do
+        expect(page).to have_content(@coupon1.name)
+        expect(page).to have_content(@coupon2.name)
+
+        expect(page).to_not have_content(@coupon3.name)
+        expect(page).to_not have_content(@coupon4.name)
       end
     end
   end

@@ -1,14 +1,32 @@
 <h1><%= "Coupons for #{@merchant.name}" %></h1>
 <section id="coupons">
-  <% @coupons.each do |coupon| %>
-    <section id="coupon-<%= coupon.id %>">
-      <li><%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %></li>
-      <% if coupon.discount_type = 0 %>
-        <%= "Value: #{coupon.value}% off" %>
-      <% elsif coupon.discount_type = 1 %>
-        <%= "Value: $#{coupon.value} off" %>
-      <% end %>
-    </section>
-  <% end %>
+  <section id="active_coupons">
+    <h3>Active Coupons</h3>
+    <% @active_coupons.each do |coupon| %>
+      <section id="coupon-<%= coupon.id %>">
+        <li><%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %></li>
+        <% if coupon.discount_type = 0 %>
+          <%= "Value: #{coupon.value}% off" %>
+        <% elsif coupon.discount_type = 1 %>
+          <%= "Value: $#{coupon.value} off" %>
+        <% end %>
+      </section>
+    <% end %>
+  </section>
+
+  <section id="inactive_coupons">
+    <h3>Inactive Coupons</h3>
+    <% @inactive_coupons.each do |coupon| %>
+      <section id="inactive_coupon-<%= coupon.id %>">
+        <li><%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %></li>
+        <% if coupon.discount_type = 0 %>
+          <%= "Value: #{coupon.value}% off" %>
+        <% elsif coupon.discount_type = 1 %>
+          <%= "Value: $#{coupon.value} off" %>
+        <% end %>
+      </section>
+    <% end %>
+  </section>
 </section>
+
 <p><%= link_to "New Coupon", new_merchant_coupon_path(@merchant) %></p>
