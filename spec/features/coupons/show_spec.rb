@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "merchant coupons index" do
+RSpec.describe "merchant coupon show" do
   before(:each) do
     @merchant1 = Merchant.create!(name: "Hair Care")
     @merchant2 = Merchant.create!(name: "Twin Lights Brewery")

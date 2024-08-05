@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Coupon, type: :model do
   describe "relationships" do
     it { should have_many :invoices }
+    it { should have_many(:invoice_items).through(:invoices) }
     it { should belong_to :merchant }
   end
   describe "validations" do
@@ -65,6 +66,20 @@ RSpec.describe Coupon, type: :model do
       expect(@coupon2.times_applied).to eq 2
       expect(@coupon3.times_applied).to eq 0
       expect(@coupon4.times_applied).to eq 1
+    end
+
+    it "pending_transactions" do
+      expect(@coupon1.pending_transactions).to eq 3
+      expect(@coupon2.pending_transactions).to eq 2
+      expect(@coupon3.pending_transactions).to eq 0
+      expect(@coupon4.pending_transactions).to eq 1
+    end
+
+    it "pending_items_count" do
+      expect(@coupon1.pending_items_count).to eq 2
+      expect(@coupon2.pending_items_count).to eq 0
+      expect(@coupon3.pending_items_count).to eq 0
+      expect(@coupon4.pending_items_count).to eq 0
     end
   end
 end

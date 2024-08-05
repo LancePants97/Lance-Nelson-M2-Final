@@ -61,6 +61,6 @@ class Merchant < ApplicationRecord
   end
 
   def active_coupons_count
-    self.coupons.where("status = 1").count
+    coupons.where("status = 1").count
   end
 end
