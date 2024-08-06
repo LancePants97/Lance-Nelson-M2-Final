@@ -3,7 +3,7 @@
   <section id="active_coupons">
     <h3>Active Coupons</h3>
     <% @active_coupons.each do |coupon| %>
-      <section id="coupon-<%= coupon.id %>">
+      <section id="active_coupon-<%= coupon.id %>">
         <li><%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %></li>
         <% if coupon.discount_type = 0 %>
           <%= "Value: #{coupon.value}% off" %>

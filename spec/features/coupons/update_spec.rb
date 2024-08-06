@@ -44,6 +44,7 @@ RSpec.describe "merchant coupon status update" do
     
     expect(current_path).to eq merchant_coupon_path(@merchant1, @coupon2)
     expect(page).to have_content("Coupon Has Been Deactivated!")
+    expect(page).to have_content("Status: inactive")
   end
 
   it "has a functional button to activate the coupon" do
@@ -54,9 +55,10 @@ RSpec.describe "merchant coupon status update" do
     
     expect(current_path).to eq merchant_coupon_path(@merchant2, @coupon7)
     expect(page).to have_content("Coupon Has Been Activated!")
+    expect(page).to have_content("Status: active")
   end
 
-  it "has no button if the merchant already has 5 active coupons" do
+  it "has no activate button if the merchant already has 5 active coupons" do
     visit merchant_coupon_path(@merchant1, @coupon3)
 
     expect(page).to have_content("Status: inactive")
@@ -66,7 +68,7 @@ RSpec.describe "merchant coupon status update" do
     expect(page).to_not have_button "Activate"
   end
 
-  it "has no button if the coupon has any pending invoice items" do
+  it "has no deactivate button if the coupon has any pending invoice items" do
     visit merchant_coupon_path(@merchant1, @coupon1)
 
     expect(page).to have_content("Status: active")
