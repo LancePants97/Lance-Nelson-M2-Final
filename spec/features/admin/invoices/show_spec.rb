@@ -8,21 +8,23 @@ describe "Admin Invoices Index Page" do
     @coupon1 = Coupon.create!(name: "50% Off!", code: "12345", value: 50, discount_type: 0, status: 1, merchant_id: @m1.id)
     @coupon2 = Coupon.create!(name: "10% Off!", code: "54321", value: 10, discount_type: 0, status: 0, merchant_id: @m1.id)
     @coupon3 = Coupon.create!(name: "$2 Off!", code: "TWOTODAY", value: 2, discount_type: 1, status: 1, merchant_id: @m1.id)
-    @coupon4 = Coupon.create!(name: "$3 Off!", code: "3DOLLAR", value: 3, discount_type: 1, status: 1, merchant_id: @m2.id)
+    @coupon4 = Coupon.create!(name: "$3 Off!", code: "3DOLLAR", value: 50, discount_type: 0, status: 1, merchant_id: @m2.id)
     @coupon5 = Coupon.create!(name: "$6 Off!", code: "6DOLLAR", value: 6, discount_type: 1, status: 0, merchant_id: @m2.id)
     
     @c1 = Customer.create!(first_name: "Yo", last_name: "Yoz", address: "123 Heyyo", city: "Whoville", state: "CO", zip: 12345)
     @c2 = Customer.create!(first_name: "Hey", last_name: "Heyz")
 
-    @i1 = Invoice.create!(customer_id: @c1.id, status: 2, created_at: "2012-03-25 09:54:09")
+    @i1 = Invoice.create!(customer_id: @c1.id, status: 2, created_at: "2012-03-25 09:54:09", coupon_id: @coupon4.id)
     @i2 = Invoice.create!(customer_id: @c2.id, status: 1, created_at: "2012-03-25 09:30:09")
 
     @item_1 = Item.create!(name: "test", description: "lalala", unit_price: 6, merchant_id: @m1.id)
     @item_2 = Item.create!(name: "rest", description: "dont test me", unit_price: 12, merchant_id: @m1.id)
+    @item_3 = Item.create!(name: "best", description: "please test me", unit_price: 10, merchant_id: @m2.id)
 
     @ii_1 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_1.id, quantity: 12, unit_price: 2, status: 0)
     @ii_2 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_2.id, quantity: 6, unit_price: 1, status: 1)
     @ii_3 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_2.id, quantity: 87, unit_price: 12, status: 2)
+    @ii_4 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_3.id, quantity: 10, unit_price: 5, status: 1)
 
     visit admin_invoice_path(@i1)
   end
@@ -61,7 +63,7 @@ describe "Admin Invoices Index Page" do
   end
 
   it "should display the total revenue the invoice will generate" do
-    expect(page).to have_content("Total Revenue: $#{@i1.total_revenue}")
+    expect(page).to have_content("Subtotal Revenue: $#{@i1.total_revenue}")
 
     expect(page).to_not have_content(@i2.total_revenue)
   end
@@ -75,5 +77,20 @@ describe "Admin Invoices Index Page" do
       expect(current_path).to eq(admin_invoice_path(@i1))
       expect(@i1.status).to eq("completed")
     end
+  end
+
+  it "should properly display subtotal and grand total revenues of all merchants on an invoice" do
+    save_and_open_page
+    # i_1_subtotal = (@ii_1.unit_price * @ii_1.quantity) + (@ii_2.unit_price * @ii_2.quantity) + (@ii_4.unit_price * @ii_4.quantity)
+    # i_1_grand_total = i_1_subtotal - @coupon3.value
+
+    # expect(page).to have_content("Subtotal Revenue: $#{invoice_8_subtotal}")
+    # expect(page).to have_content("Revenue After Coupon: $0")
+    # expect(page).to have_content("Coupon Used: #{@coupon4.name}")
+    # expect(page).to have_content("Coupon Code: #{@coupon4.code}")
+
+    # click_link(@coupon4.name)
+
+    # expect(current_path).to eq merchant_coupon_path(@merchant2, @coupon4)
   end
 end

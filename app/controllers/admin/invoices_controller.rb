@@ -5,6 +5,7 @@ class Admin::InvoicesController < ApplicationController
   end
 
   def show
+    @merchants = @invoice.merchants
   end
 
   def edit

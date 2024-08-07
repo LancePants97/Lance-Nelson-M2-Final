@@ -12,8 +12,18 @@
         <%= f.submit 'Update Invoice' %>
     </section>
       <% end %>
+
+
   <p>Created on: <%= @invoice.created_at.strftime("%A, %B %d, %Y") %>
-  <p>Total Revenue: <%= number_to_currency(@invoice.total_revenue) %>
+  <p>Subtotal Revenue: <%= number_to_currency(@invoice.total_revenue) %>
+  <% if @invoice.coupon.status == "active" %>
+    <p>Revenue After Coupon: <%= number_to_currency(@invoice.admin_grand_total) %></p>
+    <p>Coupon Used: <%= link_to "#{@invoice.coupon.name}", merchant_coupon_path(@invoice.coupon.merchant, @invoice.coupon) %>
+    <p>Coupon Code: <%= @invoice.coupon.code %></p>
+  <% else %>
+    <p><%= "Coupon Inactive - discount not applied." %></p>
+  <% end %>
+
 
   <h4>Customer:</h4>
     <%= @invoice.customer.first_name %> <%= @invoice.customer.last_name %><br>
