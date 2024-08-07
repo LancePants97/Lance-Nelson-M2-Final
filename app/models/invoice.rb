@@ -28,23 +28,28 @@ class Invoice < ApplicationRecord
     end
   end
 
-  # def merchant_invoice_subtotal(merchant) # before coupon is applied
-  #   merchant.invoice_items.sum("invoice_items.quantity * invoice_items.unit_price")
-  # end
+  # US 8
+  def merchant_grand_total # applies invoice's coupon only to items that belong to the coupon's merchant
+    merchant_invoice_items = invoice_items.joins(:item)
+                                          .where(items: { merchant_id: coupon.merchant.id })
+    total_before_coupon = merchant_invoice_items.sum('invoice_items.quantity * invoice_items.unit_price')
 
-  def merchant_grand_total # after coupon is applied
-    if coupon.discount_type == "dollar" && coupon.status == "active"
-      total_revenue - coupon.value
+    if coupon.discount_type == "percentage" && coupon.status == "active"
+      ((total_before_coupon * coupon.value) / 100)
+    elsif coupon.discount_type == "dollar" && coupon.status == "active" && total_revenue < coupon.value
+      return 0
+    elsif coupon.discount_type == "dollar" && coupon.status == "active" && total_revenue >= coupon.value
+      coupon.value
     else
       puts "Coupon must be activated to use"
     end
   end
 
-  def coupon_link
-    
+  def admin_grand_total # returns admin show page total revenue after applying coupon to one merchant's items
+    total_revenue - merchant_grand_total
+  end
+
+  def has_coupon?
+    coupon.present?
   end
 end
-
-
-    # if coupon.discount_type == "percentage" && coupon.status == "active"
-    #   ((merchant_invoice_subtotal(merchant) * coupon.value) / 100)

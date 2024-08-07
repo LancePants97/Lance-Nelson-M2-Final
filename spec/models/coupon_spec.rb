@@ -5,6 +5,7 @@ RSpec.describe Coupon, type: :model do
     it { should have_many :invoices }
     it { should have_many(:invoice_items).through(:invoices) }
     it { should belong_to :merchant }
+    it { should have_many(:transactions).through(:invoices) }
   end
   describe "validations" do
     it { should validate_presence_of :name }
