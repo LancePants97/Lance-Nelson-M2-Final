@@ -10,7 +10,7 @@ describe "Admin Invoices Index Page" do
     @coupon3 = Coupon.create!(name: "$2 Off!", code: "TWOTODAY", value: 2, discount_type: 1, status: 1, merchant_id: @m1.id)
 
     @coupon4 = Coupon.create!(name: "Half Off!", code: "Halfsies", value: 50, discount_type: 0, status: 1, merchant_id: @m2.id)
-    @coupon5 = Coupon.create!(name: "$6 Off!", code: "6DOLLAR", value: 6, discount_type: 1, status: 0, merchant_id: @m2.id)
+    @coupon5 = Coupon.create!(name: "$10 Off!", code: "10DOLLAR", value: 10, discount_type: 1, status: 1, merchant_id: @m2.id)
     
     @c1 = Customer.create!(first_name: "Yo", last_name: "Yoz", address: "123 Heyyo", city: "Whoville", state: "CO", zip: 12345)
     @c2 = Customer.create!(first_name: "Hey", last_name: "Heyz")
@@ -19,6 +19,7 @@ describe "Admin Invoices Index Page" do
     @i2 = Invoice.create!(customer_id: @c2.id, status: 1, created_at: "2012-03-25 09:30:09", coupon_id: @coupon3.id)
     @i3 = Invoice.create!(customer_id: @c1.id, status: 1, created_at: "2012-03-25 09:31:09")
     @i4 = Invoice.create!(customer_id: @c1.id, status: 1, created_at: "2012-03-25 09:31:09", coupon_id: @coupon2.id)
+    @i5 = Invoice.create!(customer_id: @c2.id, status: 1, created_at: "2012-03-25 09:31:09", coupon_id: @coupon5.id)
 
     @item_1 = Item.create!(name: "test", description: "lalala", unit_price: 6, merchant_id: @m1.id)
     @item_2 = Item.create!(name: "rest", description: "dont test me", unit_price: 12, merchant_id: @m1.id)
@@ -32,6 +33,9 @@ describe "Admin Invoices Index Page" do
 
     @ii_6 = InvoiceItem.create!(invoice_id: @i3.id, item_id: @item_2.id, quantity: 10, unit_price: 2, status: 1)
     @ii_7 = InvoiceItem.create!(invoice_id: @i3.id, item_id: @item_3.id, quantity: 5, unit_price: 5, status: 1)
+    
+    @ii_8 = InvoiceItem.create!(invoice_id: @i5.id, item_id: @item_3.id, quantity: 1, unit_price: 5, status: 1)
+    @ii_9 = InvoiceItem.create!(invoice_id: @i5.id, item_id: @item_3.id, quantity: 1, unit_price: 2, status: 1)
   end
 
   it "should display the id, status and created_at" do
@@ -135,5 +139,20 @@ describe "Admin Invoices Index Page" do
   it "displays a message if the coupon is inactive" do
     visit admin_invoice_path(@i4)
     expect(page).to have_content("Coupon Inactive - discount not applied.")
+  end
+
+  it "revenue after coupon is 0 if coupon value is greater than subtotal" do
+    visit admin_invoice_path(@i5)
+
+    i5_subtotal = (@ii_8.unit_price * @ii_8.quantity) + (@ii_9.unit_price * @ii_9.quantity)
+
+    expect(page).to have_content("Subtotal Revenue: $#{i5_subtotal}")
+    expect(page).to have_content("Revenue After Coupon: $0.00")
+    expect(page).to have_content("Coupon Used: #{@coupon5.name}")
+    expect(page).to have_content("Coupon Code: #{@coupon5.code}")
+
+    click_link(@coupon5.name)
+
+    expect(current_path).to eq merchant_coupon_path(@m2, @coupon5)
   end
 end

@@ -46,7 +46,11 @@ class Invoice < ApplicationRecord
   end
 
   def admin_grand_total # returns admin show page total revenue after applying coupon to one merchant's items
-    total_revenue - merchant_grand_total
+    if coupon.value > total_revenue
+      return 0
+    else
+      total_revenue - merchant_grand_total
+    end
   end
 
   def has_coupon?
