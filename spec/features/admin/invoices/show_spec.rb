@@ -18,6 +18,7 @@ describe "Admin Invoices Index Page" do
     @i1 = Invoice.create!(customer_id: @c1.id, status: 2, created_at: "2012-03-25 09:54:09", coupon_id: @coupon4.id)
     @i2 = Invoice.create!(customer_id: @c2.id, status: 1, created_at: "2012-03-25 09:30:09", coupon_id: @coupon3.id)
     @i3 = Invoice.create!(customer_id: @c1.id, status: 1, created_at: "2012-03-25 09:31:09")
+    @i4 = Invoice.create!(customer_id: @c1.id, status: 1, created_at: "2012-03-25 09:31:09", coupon_id: @coupon2.id)
 
     @item_1 = Item.create!(name: "test", description: "lalala", unit_price: 6, merchant_id: @m1.id)
     @item_2 = Item.create!(name: "rest", description: "dont test me", unit_price: 12, merchant_id: @m1.id)
@@ -129,5 +130,10 @@ describe "Admin Invoices Index Page" do
     expect(page).to have_content("(No coupons used on this invoice)")
   
     expect(page).to_not have_link(@coupon4.name)
+  end
+
+  it "displays a message if the coupon is inactive" do
+    visit admin_invoice_path(@i4)
+    expect(page).to have_content("Coupon Inactive - discount not applied.")
   end
 end

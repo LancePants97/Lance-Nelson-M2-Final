@@ -37,6 +37,7 @@ RSpec.describe "invoices show" do
     @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 2, coupon_id: @coupon2.id)
 
     @invoice_8 = Invoice.create!(customer_id: @customer_6.id, status: 1, coupon_id: @coupon4.id) # test
+    @invoice_9 = Invoice.create!(customer_id: @customer_2.id, status: 1) # test
 
     @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
     @ii_2 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 2)
@@ -144,5 +145,10 @@ RSpec.describe "invoices show" do
     click_link(@coupon4.name)
 
     expect(current_path).to eq merchant_coupon_path(@merchant2, @coupon4)
+  end
+
+  it "displays a message if the invoice has no coupons" do
+    visit merchant_invoice_path(@merchant1, @invoice_9)
+    expect(page).to have_content("(No coupons used on this invoice)")
   end
 end
