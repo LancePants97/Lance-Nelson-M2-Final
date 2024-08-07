@@ -12,15 +12,18 @@
 
   <p> Created on: <%= @invoice.created_at.strftime("%A, %B %-d, %Y") %></p>
   <p>Subtotal Revenue: <%= number_to_currency(@invoice.total_revenue) %></p>
-  <% if @coupon.status == "active" %>
-    <p>Revenue After Coupon: <%= number_to_currency(@invoice.grand_total) %></p>
-    <p>Coupon Used: <%= link_to "#{@invoice.coupon.name}", merchant_coupon_path(@merchant, @coupon) %>
-    <p>Coupon Code: <%= @invoice.coupon.code %></p>
+  
+  <% if @invoice.has_coupon? %>
+    <% if @coupon.status == "active" %>
+      <p>Revenue After Coupon: <%= number_to_currency(@invoice.grand_total) %></p>
+      <p>Coupon Used: <%= link_to "#{@invoice.coupon.name}", merchant_coupon_path(@merchant, @coupon) %>
+      <p>Coupon Code: <%= @invoice.coupon.code %></p>
+    <% else %>
+      <p><%= "Coupon Inactive - discount not applied." %></p>
+    <% end %>
   <% else %>
-    <p><%= "Coupon Inactive - discount not applied." %></p>
+    <p><%= "(No coupons used on this invoice)" %></p>
   <% end %>
-
-
 
   <h4>Customer:</h4>
     <%= @customer.first_name %> <%= @customer.last_name %><br>

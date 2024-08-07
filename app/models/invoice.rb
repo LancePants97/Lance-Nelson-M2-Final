@@ -39,7 +39,7 @@ class Invoice < ApplicationRecord
     elsif coupon.discount_type == "dollar" && coupon.status == "active" && total_revenue < coupon.value
       return 0
     elsif coupon.discount_type == "dollar" && coupon.status == "active" && total_revenue >= coupon.value
-      total_revenue - coupon.value
+      coupon.value
     else
       puts "Coupon must be activated to use"
     end
@@ -47,5 +47,9 @@ class Invoice < ApplicationRecord
 
   def admin_grand_total # returns admin show page total revenue after applying coupon to one merchant's items
     total_revenue - merchant_grand_total
+  end
+
+  def has_coupon?
+    coupon.present?
   end
 end
